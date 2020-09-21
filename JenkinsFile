@@ -1,8 +1,8 @@
 pipeline {
 
-  environment {
-    registry = "11.0.0.120:5000/gotestcicd"
-    dockerImage = ""
+ environment {
+    registry = "mehmettopcu/gotestcicd"
+    registryCredential = 'dockerhub'
   }
 
   agent any

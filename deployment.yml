@@ -2,30 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: myweb
-  name: myweb
+    app: gotestcicd
+  name: gotestcicd
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myweb
+      app: gotestcicd
   template:
     metadata:
       labels:
-        app: myweb
+        app: gotestcicd
     spec:
       containers:
-      - image: 11.0.0.120:5000/gotestcicd:1
+      - image: mehmettopcu/gotestcicd:1
         imagePullPolicy: Always
-        name: myweb
+        name: gotestcicd
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: myweb
-  name: myweb
+    app: gotestcicd
+  name: gotestcicd
 spec:
   ports:
   - nodePort: 32224
@@ -33,5 +33,5 @@ spec:
     protocol: TCP
     targetPort: 8008
   selector:
-    app: myweb
+    app: gotestcicd
   type: NodePort
