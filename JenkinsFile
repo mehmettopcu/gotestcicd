@@ -15,15 +15,6 @@ pipeline {
       }
     }
 
-
-    stage('Build image') {
-      steps{
-        script {
-          sleep(time: 500, unit: "SECONDS")
-          dockerImage = docker.build registry + ":v$BUILD_NUMBER"
-        }
-      }
-    }
      
     stage('Push Image') {
       steps{
