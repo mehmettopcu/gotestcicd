@@ -1,7 +1,7 @@
 pipeline {
 
  environment {
-    registry = "skyatlas/gotestcicd"
+    registry = "10.34.100.113/skyatlas/gotestcicd"
     registryCredential = 'admin'
   }
 
@@ -18,7 +18,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build registry + ":v$BUILD_NUMBER"
         }
       }
     }
