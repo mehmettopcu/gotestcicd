@@ -19,18 +19,12 @@ pipeline {
     stage('Build image') {
       steps{
         script {
+          sleep(time: 500, unit: "SECONDS")
           dockerImage = docker.build registry + ":v$BUILD_NUMBER"
         }
       }
     }
      
-    stage("A") {
-
-      steps {
-        echo "Started stage A"
-        sleep(time: 500, unit: "SECONDS")
-        }
-    }
     stage('Push Image') {
       steps{
         script {
