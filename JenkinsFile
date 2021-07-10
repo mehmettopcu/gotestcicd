@@ -1,8 +1,8 @@
 pipeline {
 
  environment {
-    registry = "mehmettopcu/gotestcicd"
-    registryCredential = 'dockerhub'
+    registry = "skyatlas/gotestcicd"
+    registryCredential = 'admin'
   }
 
   agent any
