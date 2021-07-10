@@ -14,14 +14,7 @@ pipeline {
         git 'https://github.com/mehmettopcu/gotestcicd.git'
       }
     }
-     
-    stage("A") {
 
-      steps {
-        echo "Started stage A"
-        sleep(time: 500, unit: "SECONDS")
-        }
-    }
 
     stage('Build image') {
       steps{
@@ -30,7 +23,14 @@ pipeline {
         }
       }
     }
+     
+    stage("A") {
 
+      steps {
+        echo "Started stage A"
+        sleep(time: 500, unit: "SECONDS")
+        }
+    }
     stage('Push Image') {
       steps{
         script {
