@@ -55,7 +55,7 @@ pipeline {
     stage ('deploy app') {
       steps {
         container('maven') {
-          kubernetesDeploy(configs: 'gotestcicd/deploy.yaml', kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+          kubernetesDeploy(configs: 'gotestcicd/deployment.yml', kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
         }
       }
