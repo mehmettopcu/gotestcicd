@@ -4,8 +4,11 @@ pipeline {
     registry = "10.34.100.113/skyatlas/gotestcicd"
     registryCredential = 'admin'
   }
-
-  agent any
+  
+  agent {
+    node {
+      label 'maven'
+    }
 
   stages {
 
