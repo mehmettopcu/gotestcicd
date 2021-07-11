@@ -1,8 +1,21 @@
 pipeline {
 
  environment {
-    registry = "10.34.100.113/skyatlas/gotestcicd"
-    registryCredential = 'a2535b63-dab4-411a-94a3-5a6bc308d3e6'
+    //registry = "10.34.100.113/skyatlas/gotestcicd"
+    //registryCredential = 'a2535b63-dab4-411a-94a3-5a6bc308d3e6'
+    
+    // the address of your Docker Hub registry
+    REGISTRY = '10.34.100.113/skyatlas'
+    // your Docker Hub username
+    DOCKERHUB_USERNAME = 'admin'
+    // Docker image name
+    APP_NAME = 'devops-go-sample'
+    // ‘dockerhubid’ is the credentials ID you created in KubeSphere with Docker Hub Access Token
+    DOCKERHUB_CREDENTIAL = credentials('a2535b63-dab4-411a-94a3-5a6bc308d3e6')
+    // the kubeconfig credentials ID you created in KubeSphere
+    KUBECONFIG_CREDENTIAL_ID = '75184fa5-32dc-48f0-95be-846e58b48882'
+    // the name of the project you created in KubeSphere, not the DevOps project name
+    PROJECT_NAME = 'devops-go'
   }
 
   agent {
@@ -12,20 +25,22 @@ pipeline {
   }
    
   stages {
-
-    stage('Checkout Source') {
-      steps {
-        git 'https://github.com/mehmettopcu/gotestcicd.git'
-      }
-    }
-
-    stage('Build image') {
+    stage('harbor login') {
       steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        container ('maven') {
+          sh 'echo $DOCKERHUB_CREDENTIAL_PSW  | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin $REGISTRY'
+            }
+          }  
+        }
+    stage('build & push') {
+      steps {
+        container ('maven') {
+          sh 'git clone https://github.com/mehmettopcu/gotestcicd.git'
+          sh 'cd devops-go-sample && docker build -t $REGISTRY/$APP_NAME .'
+          sh 'docker push $REGISTRY/$APP_NAME'
+          }
         }
       }
-    }
 
     stage('Push Image') {
       steps{
@@ -37,14 +52,13 @@ pipeline {
       }
     }
 
-    stage('Deploy App') {
+    stage ('deploy app') {
       steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", kubeconfigId: "kubeconfig")
+        container('maven') {
+          kubernetesDeploy(configs: 'gotestcicd/deploy.yaml', kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+          }
         }
       }
-    }
 
   }
-
 }
