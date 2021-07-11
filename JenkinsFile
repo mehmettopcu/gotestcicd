@@ -42,16 +42,6 @@ pipeline {
         }
       }
 
-    stage('Push Image') {
-      steps{
-        script {
-          docker.withRegistry( "" ) {
-            dockerImage.push()
-          }
-        }
-      }
-    }
-
     stage ('deploy app') {
       steps {
         container('maven') {
