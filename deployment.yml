@@ -15,7 +15,7 @@ spec:
         app: gotestcicd
     spec:
       containers:
-      - image: 10.34.100.113/skyatlas/devops-go-sample
+      - image: 10.34.100.113/skyatlas/devops-go-sample:latest
         imagePullPolicy: Always
         name: gotestcicd
 
