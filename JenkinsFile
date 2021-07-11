@@ -36,7 +36,7 @@ pipeline {
       steps {
         container ('maven') {
           sh 'git clone https://github.com/mehmettopcu/gotestcicd.git'
-          sh 'cd gotestcicd && docker build -t $REGISTRY/$APP_NAME .'
+          sh 'cd gotestcicd && docker build -t $REGISTRY/$APP_NAME:latest .'
           sh 'docker push $REGISTRY/$APP_NAME'
           }
         }
