@@ -1,10 +1,20 @@
-FROM golang:alpine AS build-env
-RUN mkdir /go/src/app && apk update && apk add git
-ADD main.go /go/src/app/
-WORKDIR /go/src/app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o app .
+FROM golang:1.15 as builder
 
-FROM scratch
-WORKDIR /app
-COPY --from=build-env /go/src/app/app .
-ENTRYPOINT [ "./app" ]
+RUN mkdir /go/src/app
+
+WORKDIR /go/src/app
+
+COPY go.mod go.mod
+ADD main.go /go/src/app/
+
+RUN go mod download
+
+RUN CGO_ENABLED=0 GOOS=linux GO111MODULE=on go build -a -o devops-go-sample /go/src/app/main.go
+
+
+FROM alpine:3.9
+WORKDIR /go/src/app
+
+COPY --from=builder /go/src/app/devops-go-sample .
+
+ENTRYPOINT ["./devops-go-sample"]
